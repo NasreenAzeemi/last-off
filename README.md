@@ -20,22 +20,27 @@ Imagine you have a healthcare app with 100 files. You need to find:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # Press '1' and Enter when asked
 source "$HOME/.cargo/env"
+```
 
-Step 2: Download LAST-OFF
-bash
+### Step 2: Download LAST-OFF
+```bash
 git clone https://github.com/YOUR-USERNAME/last-off-simple.git
 cd last-off-simple/last-off
-Step 3: Build the Program
-bash
+```
+### Step 3: Build the Program
+```bash
 cargo build --release
-Step 4: Use It!
-bash
+```
+### Step 4: Use It!
+```bash
 # Go to your project folder
 cd ~/my-healthcare-project
 
 # Run LAST-OFF
 ~/last-off-simple/last-off/target/release/last-off
-📋 What You'll See
+```
+### 📋 What You'll See
+```bash
 text
 ============================
    LAST-OFF: Medical Code Navigator   
@@ -47,38 +52,36 @@ text
 2  TODO        src/main.rs       15    // TODO: Add validation
 3  FIXME       src/utils.rs      7     // FIXME: This leaks memory
 
-📊 Summary:
+## 📊 Summary:
   • 1 critical healthcare risks
   • 2 TODOs
   • 1 FIXMEs
   • 4 total items to review
-🎮 How to Use (Step-by-Step)
-1. Find Problems
+```
+## 🎮 How to Use (Step-by-Step)
+### 1. Find Problems
 LAST-OFF automatically scans and shows all issues.
 
-2. Jump to Code
+### 2. Jump to Code
 Type the number (like 1) and press Enter
 
 See the code around the problem
 
 Choose an editor to open it
 
-3. Fix the Problem
+### 3. Fix the Problem
 Option 1: Use Nano (easy for beginners)
 
 Option 2: Use Gedit (like Notepad for Linux)
 
 Option 3: Copy the command to open in your favorite editor
 
-🔍 What Does It Look For?
-🚨 Critical Healthcare Risks (RED)
-SSN or social security - Social Security Numbers
-
-patient_id or MRN - Patient Medical Record Numbers
-
-PHI - Protected Health Information
-
-DOB - Date of Birth
+## 🔍 What Does It Look For?
+### 🚨 Critical Healthcare Risks (RED)
+- SSN or social security - Social Security Numbers
+- patient_id or MRN - Patient Medical Record Numbers
+- PHI - Protected Health Information
+- DOB - Date of Birth
 
 ⚠️ Warnings (YELLOW)
 FIXME - Things that need fixing
