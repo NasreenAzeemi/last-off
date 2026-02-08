@@ -29,32 +29,24 @@ Imagine you have a healthcare app with 100 files. You need to find:
 |------|---------|--------------|
 | **1. Clone** | `git clone https://github.com/NasreenAzeemi/last-off.git` | Download LAST-OFF |
 | **2. Build** | `cd last-off && cargo build --release` | Compile the program |
-| **3. Run** | `./target/release/last-off` | Scan your project |
+| **3. Run** | `./target/release/last-off`**Option A:** `./target/release/last-off`<br>**Option B:** `cargo install --path .` then `last-off` | Scan your project |
 
-## Step 1: Download LAST-OFF
-```bash
-git clone https://github.com/YOUR-USERNAME/last-off-simple.git
-cd last-off-simple/last-off
-```
-## Step 2: Build the Program
-```bash
-cargo build --release
-```
-## Step 3: Use It!
-```bash
-# Go to your project folder
-cd ~/my-healthcare-project
-
-# Run LAST-OFF
-~/last-off-simple/last-off/target/release/last-off
-```
 
 ## Example Output
-
 ```bash
-$ cd ~/my-healthcare-project
-$ ~/last-off/target/release/last-off
+# 1. Go to your project
+cd ~/my-healthcare-project
 
+# 2. Run LAST-OFF
+~/last-off/target/release/last-off
+```
+**Or if you installed globally:**
+```bash
+cd ~/my-healthcare-project
+last-off  # Much simpler!
+```
+**Expected Output**
+```bash
 ============================
    LAST-OFF: Medical Code Navigator   
 ============================
@@ -144,29 +136,28 @@ let patient_id = "P123456789";  // 🚨 PATIENT_ID found here!
 4. Help you open the file to fix it
 
 # Frequently Asked Questions
-## 🤔 **Do I need Rust knowledge?**
-**No!** Install Rust once, then just run `last-off`. No coding required!
+- 🤔 **Do I need Rust knowledge?**
+**No!** Install last-off once, then just run `last-off`. No coding required!
 
-## 🔐 Is my code safe?
+- 🔐 **Is my code safe?**
 **100% safe!** LAST-OFF runs locally, never uploads or stores your code.
 
-## 🔎 What does it scan?
+- 🔎 **What does it scan?**
 Current folder + 3 levels deep. Skips binaries and build folders.
 
-## ⏰ How fast is it?
+- ⏰ **How fast is it?**
 ~1000 files in <5 seconds. Very fast!
 
-## 💻 Windows/Mac support?
+- 💻 **Windows/Mac support?**
 **Linux/Ubuntu only** (use Virtual Machine or WSL)
 
-## 🛠 How to exit Nano?
+- 🛠 **How to exit Nano?**
 Press **Ctrl+X** → **Y** (save) or **N** (discard) → **Enter**
 
-## 🔧 "Command not found" error
+- 🔧 **"Command not found" error**
 You need to either:
-
-- Use the full path: `~/last-off-simple/last-off/target/release/last-off`
-- **OR** install globally: `cargo install --path .` from inside the `last-off` folder
+  - Use the full path: `~/last-off-simple/last-off/target/release/last-off`
+  - **OR** install globally: `cargo install --path .` from inside the `last-off` folder
 
 ## ❌ It's not finding my TODOs!
 Make sure your comments have `TODO` or `FIXME` in them (case doesn't matter):
