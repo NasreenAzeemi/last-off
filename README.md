@@ -33,17 +33,22 @@ Imagine you have a healthcare app with 100 files. You need to find:
 
 
 ## Example Output
-```bash
-# 1. Go to your project
+```rust
+// 1. Go to your project
 cd ~/my-healthcare-project
 
-# 2. Run LAST-OFF
+// 2. Run LAST-OFF
 ~/last-off/target/release/last-off
 ```
 **Or if you installed globally:**
-```bash
+```rust
+// 1. Install globally
+cd last-off
+cargo install --path .
+
+// 2. Goto any folder and type last-off
 cd ~/my-healthcare-project
-last-off  # Much simpler!
+last-off  
 ```
 **Expected Output**
 ```bash
