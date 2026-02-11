@@ -50,7 +50,7 @@ fn scan_todos_and_risks(path: &std::path::Path) -> Result<Vec<CodeItem>, Box<dyn
     {
         if entry.file_type().is_file() {
             let file_path = entry.path();
-            let file_path_str = entry.path().to_string_lossy().to_string();
+            let _file_path_str = entry.path().to_string_lossy().to_string();
             let file_name = entry.path().file_name().unwrap_or_default().to_string_lossy();
             
             // Skip binary/large files
@@ -197,7 +197,7 @@ fn interactive_jump(items: &[CodeItem]) {
     println!("\n{}", "JUMP TO CODE:".cyan().bold());
     println!("  • Enter number (1-{}) to select item", items.len());
     println!("  • Press Enter to exit");
-    println!("  • Type 'a' to see ALL locations");
+    println!("  • Type 'a' to see all locations");
     
     print!("\n{} ", "Select item:".green().bold());
     io::stdout().flush().unwrap();
@@ -471,7 +471,7 @@ fn show_simple_install_prompt(editor_name: &str, command_name: &str, install_cmd
                     println!("{} Failed to install {}", "❌".red(), editor_name);
                 }
             }
-            Err(e) => {
+            Err(_e) => {
                 println!("{} Need sudo privileges. Run manually:", "NOTE: Requires sudo previleges".red());
                 println!("  {}", install_cmd);
             }
