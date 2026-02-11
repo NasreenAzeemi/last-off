@@ -1,4 +1,4 @@
-//before: if an editor is not installed, it opens a blank page.
+//after: if an editor is not installed, it does NOT open a blank page.
 // Use specific imports to avoid conflicts
 use comfy_table::{Table, Color, Cell, Attribute};
 use comfy_table::presets::UTF8_FULL;
@@ -11,12 +11,12 @@ fn main() {
     println!("{}", "=".repeat(60).blue());
     
     let path = std::env::current_dir().expect("Failed to get current directory");
-    println!("📁 Scanning: {}", path.display());
+    println!("SCANNING: {}", path.display());
     
     match scan_todos_and_risks(&path) {
         Ok(items) => {
             if items.is_empty() {
-                println!("\n✅ No TODOs, FIXMEs, or healthcare risks found!");
+                println!("\nNo TODOs, FIXMEs, or healthcare risks found!");
             } else {
                 display_table(&items);
                 interactive_jump(&items);
@@ -97,13 +97,13 @@ fn detect_healthcare_risk(line: &str) -> Option<&'static str> {
     let lower = line.to_lowercase();
     
     if lower.contains("ssn") || lower.contains("social security") {
-        Some("🚨 SSN")
+        Some("[CRITICAL] SSN")
     } else if lower.contains("patient_id") || lower.contains("patient id") || lower.contains("mrn") {
-        Some("🚨 PATIENT_ID")
+        Some("[CRITICAL] PATIENT_ID")
     } else if lower.contains("phi") || lower.contains("protected health") {
-        Some("⚠️ PHI")
+        Some("[WARNING] PHI")
     } else if lower.contains("dob") || lower.contains("date of birth") {
-        Some("⚠️ DOB")
+        Some("[WARNING] DOB")
     } else {
         None
     }
@@ -148,9 +148,9 @@ fn display_table(items: &[CodeItem]) {
     ]);
     
     for item in items {
-        let type_cell = if item.kind.starts_with("🚨") {
+        let type_cell = if item.kind.starts_with("[CRITICAL]") {
             Cell::new(&item.kind).fg(Color::Red).add_attribute(Attribute::Bold)
-        } else if item.kind.starts_with("⚠️") {
+        } else if item.kind.starts_with("[WARNING]") {
             Cell::new(&item.kind).fg(Color::Yellow).add_attribute(Attribute::Bold)
         } else if item.kind == "FIXME" {
             Cell::new(&item.kind).fg(Color::Red)
@@ -172,12 +172,12 @@ fn display_table(items: &[CodeItem]) {
     println!("\n{}\n", table);
     
     // Simple summary
-    let healthcare_count = items.iter().filter(|i| i.kind.contains("🚨")).count();
-    let warning_count = items.iter().filter(|i| i.kind.contains("⚠️")).count();
+    let healthcare_count = items.iter().filter(|i| i.kind.contains("[CRITICAL]")).count();
+    let warning_count = items.iter().filter(|i| i.kind.contains("[WARNING]")).count();
     let fixme_count = items.iter().filter(|i| i.kind == "FIXME").count();
     let todo_count = items.iter().filter(|i| i.kind == "TODO").count();
     
-    println!("{}", "📊 Summary:".bold());
+    println!("{}", "SUMMARY:".bold());
     if healthcare_count > 0 {
         println!("  • {} critical healthcare risks", healthcare_count.to_string().red());
     }
@@ -194,7 +194,7 @@ fn display_table(items: &[CodeItem]) {
 }
 
 fn interactive_jump(items: &[CodeItem]) {
-    println!("\n{}", "🎯 JUMP TO CODE:".cyan().bold());
+    println!("\n{}", "JUMP TO CODE:".cyan().bold());
     println!("  • Enter number (1-{}) to select item", items.len());
     println!("  • Press Enter to exit");
     println!("  • Type 'a' to see ALL locations");
@@ -207,12 +207,12 @@ fn interactive_jump(items: &[CodeItem]) {
     let input = input.trim();
     
     if input.is_empty() {
-        println!("{}", "Goodbye! 👋".cyan());
+        println!("{}", "Goodbye!".cyan());
         return;
     }
     
     if input.eq_ignore_ascii_case("a") {
-        println!("\n{}", "📍 ALL ITEMS LOCATIONS:".cyan().bold());
+        println!("\n{}", "ALL ITEMS LOCATIONS:".cyan().bold());
         for item in items {
             println!("  {} {}:{} - {}", 
                 item.id.to_string().blue(),
@@ -250,7 +250,7 @@ fn show_editor_options(item: &CodeItem) {
         let start = if item.line > 3 { item.line - 3 } else { 1 };
         let end = std::cmp::min(item.line + 2, lines.len());
         
-        println!("\n{}", "📄 CONTEXT:".bold());
+        println!("\n{}", "CONTEXT:".bold());
         for i in start..=end {
             let prefix = if i == item.line { ">>> " } else { "    " };
             let line_content = lines.get(i-1).unwrap_or(&"");
@@ -260,7 +260,7 @@ fn show_editor_options(item: &CodeItem) {
     
     println!("{}", "=".repeat(60).cyan());
     
-    println!("\n{}", "📝 OPEN WITH:".bold());
+    println!("\n{}", "OPEN WITH:".bold());
     
     // Check which editors are available
     let code_exists = std::process::Command::new("which").arg("code").output().map(|o| o.status.success()).unwrap_or(false);
@@ -332,15 +332,15 @@ fn show_editor_options(item: &CodeItem) {
                 println!("\n{}", "=".repeat(50).red());
                 println!("{} {} IS NOT INSTALLED", "❌".red(), "VS Code".bold());
                 println!("{}", "=".repeat(50).red());
-                println!("\n{} VS Code needs to be downloaded separately:", "📦".yellow());
+                println!("\n{} VS Code needs to be downloaded separately:", "To install:".yellow());
                 println!("  1. {}", "Visit: https://code.visualstudio.com/".blue().underline());
                 println!("  2. {}", "Download the .deb package".cyan());
                 println!("  3. {}", "Install with: sudo dpkg -i <package>.deb".green());
                 println!("  4. {}", "If dependencies missing: sudo apt --fix-broken install".green());
-                println!("\n{} Please choose another editor or install VS Code first", "💡".cyan());
+                println!("\n{} Please choose another editor or install VS Code first", "TIP:".cyan());
                 
                 // Ask if they want to choose another editor
-                print!("\n{} Choose another editor now? (y/n): ", "🔄".yellow());
+                print!("\nChoose another editor now? (y/n): ");
                 io::stdout().flush().unwrap();
                 let mut retry = String::new();
                 io::stdin().read_line(&mut retry).unwrap();
@@ -349,7 +349,7 @@ fn show_editor_options(item: &CodeItem) {
                     show_editor_options(item); // Show options again
                 }
             } else {
-                println!("\n{}", "🚀 Opening VS Code...".yellow());
+                println!("\n{}", "Opening VS Code...".yellow());
                 let command = format!("code --goto '{}':{}", full_path_str, item.line);
                 let _ = std::process::Command::new("bash")
                     .arg("-c")
@@ -362,8 +362,8 @@ fn show_editor_options(item: &CodeItem) {
             if !vim_exists {
                 show_simple_install_prompt("Vim", "vim", "sudo apt install vim", item);
             } else {
-                println!("\n{}", "🚀 Opening Vim in NEW terminal window...".yellow());
-                println!("{}", "💡 In NEW window: Press ESC then :q to exit".cyan());
+                println!("\n{}", "Opening Vim in NEW terminal window...".yellow());
+                println!("{}", "In NEW window: Press ESC then :q to exit".cyan());
                 let command = format!("gnome-terminal -- bash -c \"vim +{} '{}'; exec bash\"", item.line, full_path_str);
                 let _ = std::process::Command::new("bash")
                     .arg("-c")
@@ -377,7 +377,7 @@ fn show_editor_options(item: &CodeItem) {
                 show_simple_install_prompt("Nano", "nano", "sudo apt install nano", item);
             } else {
                 println!("\n{}", "🚀 Opening Nano in NEW terminal window...".yellow());
-                println!("{}", "💡 Look for a NEW window to appear!".cyan());
+                println!("{}", "TIP: Look for a NEW window to appear!".cyan());
                 
                 let command = format!("gnome-terminal -- bash -c \"nano +{} '{}'; exec bash\"", item.line, full_path_str);
                 
@@ -386,13 +386,13 @@ fn show_editor_options(item: &CodeItem) {
                     .arg(&command)
                     .spawn() {
                     Ok(_) => {
-                        println!("✅ New terminal window launched!");
-                        println!("{} Use arrow keys in the NEW window", "💡".cyan());
-                        println!("{} Press Ctrl+X to exit Nano", "💡".cyan());
+                        println!("New terminal window launched!");
+                        println!("{} Use arrow keys in the NEW window", "TIP:".cyan());
+                        println!("{} Press Ctrl+X to exit Nano", "TIP:".cyan());
                     }
                     Err(e) => {
                         println!("{} Failed to open new window: {}", "❌".red(), e);
-                        println!("{} Try this instead:", "👉".yellow());
+                        println!("{} Try this instead:", "Try this instead:".yellow());
                         println!("  {}", format!("nano +{} '{}'", item.line, full_path_str).green());
                         println!("  (Then press Ctrl+X to exit)");
                     }
@@ -414,18 +414,18 @@ fn show_editor_options(item: &CodeItem) {
         }
         5 => {
             // Copy all commands
-            println!("\n{}", "📋 ALL COMMANDS:".cyan());
-            println!("{} VS Code:", "💻".blue());
+            println!("\n{}", "ALL COMMANDS:".cyan());
+            println!("{} VS Code:", "[VS Code]".blue());
             println!("  code --goto '{}':{}", full_path_str, item.line);
-            println!("{} Vim:", "💻".green());
+            println!("{} Vim:", "[Vim]".green());
             println!("  vim +{} '{}'", item.line, full_path_str);
             println!("  gnome-terminal -- bash -c \"vim +{} '{}'; exec bash\"", item.line, full_path_str);
-            println!("{} Nano:", "💻".yellow());
+            println!("{} Nano:", "[Nano]".yellow());
             println!("  nano +{} '{}'", item.line, full_path_str);
             println!("  gnome-terminal -- bash -c \"nano +{} '{}'; exec bash\"", item.line, full_path_str);
-            println!("{} Gedit:", "💻".magenta());
+            println!("{} Gedit:", "[Gedit]".magenta());
             println!("  gedit +{} '{}'", item.line, full_path_str);
-            println!("\n{} Copy any command above and paste in terminal", "📋".cyan());
+            println!("\n{} Copy any command above and paste in terminal", "Note:".cyan());
         }
         6 => {
             // Cancel
@@ -443,18 +443,18 @@ fn show_simple_install_prompt(editor_name: &str, command_name: &str, install_cmd
     println!("{} {} IS NOT INSTALLED", "❌".red(), editor_name.bold());
     println!("{}", "=".repeat(50).red());
     
-    println!("\n{} To install {}:", "📦".yellow(), editor_name);
+    println!("\n{} To install {}:", "To install:".yellow(), editor_name);
     println!("  {}", install_cmd.green());
     
-    println!("\n{} Quick install now? (y/n): ", "⚡".cyan());
+    println!("\n{} Quick install now? (y/n): ", "Quick intall?".cyan());
     io::stdout().flush().unwrap();
     
     let mut install_now = String::new();
     io::stdin().read_line(&mut install_now).unwrap();
     
     if install_now.trim().eq_ignore_ascii_case("y") {
-        println!("\n{} Running: {}", "🔧".yellow(), install_cmd);
-        println!("{} This may take a moment...", "⏳".cyan());
+        println!("\n{} Running: {}", "Running:".yellow(), install_cmd);
+        println!("{} This may take a moment...", "This may take a moment...".cyan());
         
         match std::process::Command::new("sudo")
             .arg("apt")
@@ -465,21 +465,21 @@ fn show_simple_install_prompt(editor_name: &str, command_name: &str, install_cmd
             Ok(mut child) => {
                 let status = child.wait().expect("Failed to wait for apt install");
                 if status.success() {
-                    println!("{} {} installed successfully!", "✅".green(), editor_name);
-                    println!("\n{} Run last-off again to use {}", "🔄".cyan(), editor_name);
+                    println!("{} {} installed successfully!", "SUCCESS".green(), editor_name);
+                    println!("\n{} Run last-off again to use {}", "Run last-off again to use".cyan(), editor_name);
                 } else {
                     println!("{} Failed to install {}", "❌".red(), editor_name);
                 }
             }
             Err(e) => {
-                println!("{} Need sudo privileges. Run manually:", "🔒".red());
+                println!("{} Need sudo privileges. Run manually:", "NOTE: Requires sudo previleges".red());
                 println!("  {}", install_cmd);
             }
         }
     } else {
-        println!("\n{} Please choose another editor or install {} first", "💡".cyan(), editor_name);
+        println!("\n{} Please choose another editor or install {} first", "TIP:".cyan(), editor_name);
         
-        print!("{} Choose another editor now? (y/n): ", "🔄".yellow());
+        print!("Choose another editor now? (y/n): ");
         io::stdout().flush().unwrap();
         let mut retry = String::new();
         io::stdin().read_line(&mut retry).unwrap();
