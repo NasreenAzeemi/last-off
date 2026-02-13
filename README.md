@@ -37,7 +37,7 @@ cargo build --release
 ```bash
 ./target/release/last-off
 ```
-**Option B: Install globally (recommended)** 
+**Option B: Install globally (recommended) from last-off folder** 
 ```bash
 cargo install --path .
 # Now you can use last-off from anywhere!
