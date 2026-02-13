@@ -176,6 +176,51 @@ Make sure your comments have `TODO` or `FIXME` (case doesn't matter):
 ### How do I exit Nano?
 Press `Ctrl+X`, then `Y` to save or `N` to discard, then `Enter`.
 
+# Uninstalling LAST-OFF
+Here are different ways to clean depending on what you would want to do.
+
+## Option 1: Remove ONLY the installed binary (if you used cargo install)
+```bash
+# Remove the globally installed binary
+cargo uninstall last-off
+```
+This removes the installed last-off binary from ~/.cargo/bin/ but keeps your source code.
+
+## Option 2: Clean build artifacts (keep source, remove compiled files)
+```bash
+# Go to your project
+cd ~/last-off-simple/last-off
+
+# Remove the /target folder (build artifacts)
+cargo clean
+```
+This deletes the target/ folder (where compiled binaries live) but keeps your source code. You'll need to rebuild with cargo build later.
+
+## Option 3: Complete removal (binary + build artifacts + source)
+```bash
+# First uninstall if you installed globally
+cargo uninstall last-off
+
+# Then delete the entire project folder
+rm -rf ~/last-off-simple
+```
+This deletes everything! Only do this if you want to completely remove LAST-OFF.
+
+## Option 4: Just remove the binary file (manual)
+```bash
+# If you know where the binary is
+rm ~/last-off-simple/last-off/target/release/last-off
+rm ~/.cargo/bin/last-off  # if installed globally
+```
+
+## Check What's Installed
+To check if LAST-OFF is still installed:
+```bash
+which last-off
+# or
+ls ~/.cargo/bin/last-off
+```
+
 # Contributing
 Found a bug? Have an idea? [Open an Issue](https://github.com/NasreenAzeemi/last-off/issues)!
 
