@@ -1,4 +1,5 @@
 # LAST-OFF: Medical Code Navigator
+**Visit the official website:** [last-off](https://nasreenazeemi.github.io/last-off/website/last-off.html)
 
 **Find TODOs, FIXMEs, and healthcare risks in your code - Made for healthcare developers!**
 
@@ -33,7 +34,7 @@ cargo build --release
 ```
 
 ## How to Run
-Install globally (recommended) from last-off folder** 
+Install globally from last-off folder** 
 ```bash
 cargo install --path .
 # Now you can use last-off from anywhere!
@@ -77,7 +78,7 @@ Select item: 1
 
 # How to Use
 ## 1. Scan Your Project
-Simply run `lat-off` in any folder (gloablly installed). It automatically finds all issues. 
+First gloablly install, then simply run `lat-off` in any folder. It automatically finds all issues. 
 
 ## 2. Jump to Code
 - Type the number (like `1`) and press Enter
@@ -147,21 +148,20 @@ Current folder + 3 levels deep. Skips binaries and build folders.
 cd last-off
 git pull
 cargo build --release
-# or if installed globally:
 cargo install --path . --force
 ```
 
 ### It says "command not found"!
-#### Solution 1: Use the full path: 
+#### Solution: Install globally (do once): 
 ```bash
-~/last-off-simple/last-off/target/release/last-off
-```
-
-#### Solution 2: Install globally (do once): 
-```bash
+# Goto your last-off folder
 cd last-off
 cargo install --path .
-# Now just type last-off
+
+# Now you can type last-off in any project folder!
+# Example
+cd ~/my_projects/healthcare_demo
+last-off
 ```
 
 ### ❌ It's not finding my TODOs!
